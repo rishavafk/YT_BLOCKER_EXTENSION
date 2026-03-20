@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YT Focus Shield</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --border: #252525;
+    --accent: #ff3c3c;
+    --accent2: #ff7a00;
+    --text: #e8e8e8;
+    --muted: #666;
+    --green: #2dff6e;
+  }
+
+  body {
+    width: 340px;
+    min-height: 480px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 12px;
+    overflow: hidden;
+  }
+
+  /* Header */
+  .header {
+    padding: 16px 18px 12px;
+    background: linear-gradient(135deg, #1a0000 0%, #0d0d0d 100%);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-icon {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+
+  .header p {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Status bar */
+  .status-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Sections */
+  .section {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* Toggle rows */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    gap: 10px;
+  }
+
+  .toggle-label {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .toggle-sub {
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* Toggle switch */
+  .toggle {
+    position: relative;
+    width: 36px; height: 20px;
+    flex-shrink: 0;
+  }
+
+  .toggle input { display: none; }
+
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: #2a2a2a;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: 1px solid #333;
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #555;
+    transition: transform 0.2s, background 0.2s;
+    pointer-events: none;
+  }
+
+  .toggle input:checked + .toggle-track {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .toggle input:checked + .toggle-track .toggle-thumb {
+    transform: translateX(16px);
+    background: #fff;
+  }
+
+  /* Block current video button */
+  .btn-primary {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* Lists */
+  .list-container {
+    margin-top: 6px;
+  }
+
+  .add-row {
+    display: flex;
+    gap: 6px;
+  }
+
+  .add-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: inherit;
+    font-size: 11px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .add-input:focus { border-color: #444; }
+  .add-input::placeholder { color: var(--muted); }
+
+  .add-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .add-btn:hover { border-color: #444; color: #fff; }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+    max-height: 72px;
+    overflow-y: auto;
+  }
+
+  .tag {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #ccc;
+  }
+
+  .tag-remove {
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1;
+    padding: 0 2px;
+  }
+
+  .tag-remove:hover { color: var(--accent); }
+
+  /* Empty */
+  .empty-tags {
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-stat {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .footer-stat span {
+    color: var(--green);
+  }
+
+  .reset-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 10px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .reset-btn:hover { color: var(--accent); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-icon">🛡️</div>
+  <div>
+    <h1>YT Focus Shield</h1>
+    <p>Block distractions on YouTube</p>
+  </div>
+</div>
+
+<div class="status-bar">
+  <div class="status-dot"></div>
+  <span>Active on youtube.com</span>
+</div>
+
+<!-- Main toggles -->
+<div class="section">
+  <div class="section-label">Block Settings</div>
+
+  <div class="toggle-row">
+    <div class="toggle-label">
+      Homepage Recommendations
+      <span class="toggle-sub">Hide the entire homepage feed</span>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="blockRecommendations">
+      <div class="toggle-track"><div class="toggle-thumb"></div></div>
+    </label>
+  </div>
+
+  <div class="toggle-row">
+    <div class="toggle-label">
+      Sidebar "Up Next"
+      <span class="toggle-sub">Remove related videos sidebar</span>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="blockSidebar">
+      <div class="toggle-track"><div class="toggle-thumb"></div></div>
+    </label>
+  </div>
+
+  <div class="toggle-row">
+    <div class="toggle-label">
+      End Screen Cards
+      <span class="toggle-sub">Block autoplay cards at end</span>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="blockEndScreen">
+      <div class="toggle-track"><div class="toggle-thumb"></div></div>
+    </label>
+  </div>
+
+  <div class="toggle-row">
+    <div class="toggle-label">
+      Shorts Autoplay
+      <span class="toggle-sub">Pause Shorts & hide Shorts shelf</span>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="blockShortsAutoplay">
+      <div class="toggle-track"><div class="toggle-thumb"></div></div>
+    </label>
+  </div>
+</div>
+
+<!-- Block current page -->
+<div class="section">
+  <div class="section-label">Quick Block</div>
+  <button class="btn-primary" id="blockCurrentChannel">
+    🚫 Block Current Video's Channel
+  </button>
+</div>
+
+<!-- Blocked keywords -->
+<div class="section">
+  <div class="section-label">Blocked Keywords</div>
+  <div class="list-container">
+    <div class="add-row">
+      <input class="add-input" id="keywordInput" placeholder="e.g. clickbait, prank..." maxlength="50">
+      <button class="add-btn" id="addKeyword">Add</button>
+    </div>
+    <div class="tag-list" id="keywordList"></div>
+  </div>
+</div>
+
+<!-- Blocked channels -->
+<div class="section">
+  <div class="section-label">Blocked Channels</div>
+  <div class="list-container">
+    <div class="add-row">
+      <input class="add-input" id="channelInput" placeholder="e.g. MrBeast..." maxlength="60">
+      <button class="add-btn" id="addChannel">Add</button>
+    </div>
+    <div class="tag-list" id="channelList"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-stat">
+    Blocked: <span id="totalBlocked">0</span> rules active
+  </div>
+  <button class="reset-btn" id="resetAll">Reset all</button>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

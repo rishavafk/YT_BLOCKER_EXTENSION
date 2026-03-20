@@ -1,0 +1,91 @@
+/* YT Focus Shield - Injected Styles v2 */
+
+.ytfs-block-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(10,10,10,0.9);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  z-index: 500;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  line-height: 1.5;
+}
+
+ytd-video-renderer:hover .ytfs-block-btn,
+ytd-compact-video-renderer:hover .ytfs-block-btn,
+ytd-rich-item-renderer:hover .ytfs-block-btn { opacity: 1; }
+
+.ytfs-block-btn:hover {
+  background: rgba(220,38,38,0.9) !important;
+  border-color: #dc2626;
+  opacity: 1 !important;
+}
+
+.ytfs-menu {
+  position: absolute;
+  z-index: 999999;
+  background: #111;
+  border: 1px solid #2e2e2e;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+  min-width: 260px;
+  animation: ytfs-pop 0.12s ease;
+}
+
+@keyframes ytfs-pop {
+  from { opacity:0; transform:scale(0.96) translateY(-4px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+
+.ytfs-menu-item {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  background: transparent;
+  color: #ddd;
+  border: none;
+  border-bottom: 1px solid #1e1e1e;
+  text-align: left;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Courier New', monospace;
+  transition: background 0.1s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
+.ytfs-menu-item:last-child { border-bottom:none; color:#666; }
+.ytfs-menu-item:hover { background:#1e1e1e; color:#fff; }
+
+.ytfs-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 13px;
+  font-family: 'Courier New', monospace;
+  z-index: 9999999;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+  animation: ytfs-fadein 0.2s ease;
+  white-space: nowrap;
+}
+
+@keyframes ytfs-fadein {
+  from { opacity:0; transform:translateX(-50%) translateY(8px); }
+  to   { opacity:1; transform:translateX(-50%) translateY(0); }
+}
